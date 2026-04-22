@@ -319,9 +319,7 @@ export default function App() {
           </div>
         </motion.div>
 
-        <div className="absolute bottom-8 text-neutral-500 font-mono text-sm">
-          Version 2.0.4 // Academy of sciences
-        </div>
+
       </div>
     );
   }
@@ -899,7 +897,7 @@ export default function App() {
                     className="flex flex-col gap-6"
                   >
                       <div className='flex items-center gap-5 p-6 bg-black/40 rounded-3xl border border-white/5'>
-                          <MetalIcon type={activeMetal.iconType} color={activeMetal.color} size='small' />
+                          <MetalIcon type={activeMetal.iconType} color={activeMetal.color} symbol={activeMetal.chemical} size='small' />
                           <div>
                             <p className="text-[10px] font-black text-neutral-500">{activeMetal.chemical}</p>
                             <h4 className="font-black text-white text-3xl tracking-tight">{activeMetal.name}</h4>
