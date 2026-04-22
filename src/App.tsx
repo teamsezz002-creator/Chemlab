@@ -361,7 +361,7 @@ export default function App() {
           <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
              <Target className="text-blue-500" /> Mission log
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12">
             <div className="space-y-4">
               {SCENARIOS.map((s, i) => (
                 <div key={s.id} className="bg-neutral-900/50 p-6 rounded-2xl flex items-center justify-between border border-white/5 hover:border-white/20 transition-all">
@@ -432,23 +432,23 @@ export default function App() {
 
   if (gameState === 'INTRO') {
     return (
-      <div className="h-screen bg-neutral-950 flex flex-col items-center justify-center p-6 text-white font-sans">
+      <div className="h-screen bg-neutral-950 flex flex-col items-center justify-center p-4 md:p-6 text-white font-sans overflow-y-auto">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-2xl w-full bg-neutral-900 p-12 rounded-[2.5rem] border border-white/10 shadow-3xl text-center"
+          className="max-w-2xl w-full bg-neutral-900 p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-white/10 shadow-3xl text-center my-auto"
         >
-          <div className="w-16 h-2 bg-blue-500 rounded-full mx-auto mb-8" />
-          <h1 className="text-5xl font-black mb-6 tracking-tight">Mission {currentLevel + 1}: {scenario.title}</h1>
-          <p className="text-blue-200/70 text-xl leading-relaxed mb-12">
+          <div className="w-12 md:w-16 h-1.5 md:h-2 bg-blue-500 rounded-full mx-auto mb-6 md:mb-8" />
+          <h1 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 tracking-tight leading-tight">Mission {currentLevel + 1}: {scenario.title}</h1>
+          <p className="text-blue-200/70 text-lg md:text-xl leading-relaxed mb-8 md:mb-12">
             "{scenario.intro}"
           </p>
           
-          <div className="bg-blue-600/10 p-6 rounded-2xl border border-blue-500/30 mb-12 flex items-center gap-4 text-left">
-             <Target className="text-blue-500 shrink-0" size={32} />
+          <div className="bg-blue-600/10 p-4 md:p-6 rounded-2xl border border-blue-500/30 mb-8 md:mb-12 flex items-center gap-4 text-left">
+             <Target className="text-blue-500 shrink-0" size={28} />
              <div>
-               <p className="text-xs font-black text-blue-500">Main objective</p>
-               <p className="text-lg font-bold">{scenario.objective}</p>
+               <p className="text-[10px] md:text-xs font-black text-blue-500 uppercase tracking-widest">Main objective</p>
+               <p className="text-base md:text-lg font-bold">{scenario.objective}</p>
              </div>
           </div>
 
@@ -476,45 +476,45 @@ export default function App() {
           animate={{ y: 0, opacity: 1 }}
           className="max-w-3xl w-full z-10"
         >
-           <div className="bg-neutral-900 p-12 rounded-[3rem] border border-white/10 shadow-3xl relative overflow-hidden">
+           <div className="bg-neutral-900 p-6 md:p-12 rounded-[2rem] md:rounded-[3rem] border border-white/10 shadow-3xl relative overflow-hidden">
              
              {showFeedback && (
                <motion.div 
                  initial={{ opacity: 0, scale: 0.9 }}
                  animate={{ opacity: 1, scale: 1 }}
-                 className={`absolute inset-0 z-20 backdrop-blur-xl flex flex-col items-center justify-center p-12 text-center ${quizAnswer === quiz.correctIndex ? 'bg-emerald-950/90' : 'bg-red-950/90'}`}
+                 className={`absolute inset-0 z-20 backdrop-blur-xl flex flex-col items-center justify-center p-6 md:p-12 text-center ${quizAnswer === quiz.correctIndex ? 'bg-emerald-950/90' : 'bg-red-950/90'}`}
                >
                  {quizAnswer === quiz.correctIndex ? (
-                   <CheckCircle2 size={120} className="text-emerald-500 mb-6" />
+                   <CheckCircle2 size={80} className="md:size-[120px] text-emerald-500 mb-4 md:mb-6" />
                  ) : (
-                   <AlertCircle size={120} className="text-red-500 mb-6" />
+                   <AlertCircle size={80} className="md:size-[120px] text-red-500 mb-4 md:mb-6" />
                  )}
-                 <h2 className="text-4xl font-black mb-4">
+                 <h2 className="text-2xl md:text-4xl font-black mb-2 md:mb-4">
                    {quizAnswer === quiz.correctIndex ? 'Exemplary!' : 'Critical error'}
                  </h2>
-                 <p className="text-xl leading-relaxed text-neutral-200">
+                 <p className="text-base md:text-xl leading-relaxed text-neutral-200">
                    {quiz.explanation}
                  </p>
                </motion.div>
              )}
 
-             <span className="inline-block px-4 py-1.5 bg-blue-600 rounded-full text-xs font-black mb-6">Post-experiment evaluation</span>
-             <h2 className="text-4xl font-black mb-10 leading-tight">
+             <span className="inline-block px-4 py-1.5 bg-blue-600 rounded-full text-[10px] md:text-xs font-black mb-4 md:mb-6 uppercase tracking-wider">Post-experiment evaluation</span>
+             <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-10 leading-tight">
                {quiz.question}
              </h2>
 
-             <div className="grid gap-4">
+             <div className="grid gap-3 md:gap-4">
                {quiz.options.map((opt, i) => (
                  <button 
                    key={i}
                    onClick={() => handleQuizChoice(i)}
                    disabled={showFeedback}
-                   className="w-full p-6 text-left text-xl font-bold rounded-2xl border border-white/5 bg-neutral-800 hover:bg-neutral-700 hover:border-white/20 transition-all flex items-center gap-4 group"
+                   className="w-full p-4 md:p-6 text-left text-base md:text-xl font-bold rounded-xl md:rounded-2xl border border-white/5 bg-neutral-800 hover:bg-neutral-700 hover:border-white/20 transition-all flex items-center gap-3 md:gap-4 group"
                  >
-                   <div className="w-10 h-10 rounded-lg bg-neutral-900 flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                   <div className="w-8 md:w-10 h-8 md:h-10 shrink-0 rounded-lg bg-neutral-900 flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-colors text-sm md:text-base">
                      {String.fromCharCode(65 + i)}
                    </div>
-                   {opt}
+                   <span className="leading-tight">{opt}</span>
                  </button>
                ))}
              </div>
@@ -526,50 +526,50 @@ export default function App() {
 
   if (gameState === 'RECAP') {
     return (
-      <div className="h-screen bg-neutral-950 flex flex-col items-center justify-center p-6 text-white font-sans">
+      <div className="h-screen bg-neutral-950 flex flex-col items-center justify-center p-6 text-white font-sans overflow-y-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-lg w-full text-center"
+          className="max-w-lg w-full text-center py-8"
         >
-          <div className="mb-12">
-            <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-400 mb-2 italic tracking-tighter">Mission report</h1>
-            <div className="h-1 w-32 bg-blue-500 mx-auto rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-500/50 mt-4">Laboratory Analysis System v2.0</p>
+          <div className="mb-8 md:mb-12">
+            <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-400 mb-2 italic tracking-tighter">Mission report</h1>
+            <div className="h-1 w-24 md:w-32 bg-blue-500 mx-auto rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+            <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] text-blue-500/50 mt-4">Laboratory Analysis System v2.0</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-12">
-            <div className="bg-neutral-900 p-6 rounded-3xl border border-white/5 shadow-xl relative overflow-hidden group hover:border-blue-500/30 transition-colors">
-              <div className="absolute top-0 right-0 p-2 opacity-5"><Clock size={40} /></div>
-              <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1 text-left">Tempo</p>
-              <p className="text-5xl font-black text-left font-mono">{timer.toString().padStart(3, '0')}<span className="text-xl text-neutral-600 ml-1">S</span></p>
+          <div className="grid grid-cols-2 gap-3 md:gap-4 mb-8 md:mb-12">
+            <div className="bg-neutral-900 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5 shadow-xl relative overflow-hidden group hover:border-blue-500/30 transition-colors">
+              <div className="absolute top-0 right-0 p-2 opacity-5"><Clock size={32} /></div>
+              <p className="text-[9px] md:text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1 text-left">Tempo</p>
+              <p className="text-3xl md:text-5xl font-black text-left font-mono">{timer.toString().padStart(3, '0')}<span className="text-base md:text-xl text-neutral-600 ml-1">S</span></p>
             </div>
-            <div className="bg-neutral-900 p-6 rounded-3xl border border-white/5 shadow-xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
-              <div className="absolute top-0 right-0 p-2 opacity-5"><Trophy size={40} /></div>
-              <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1 text-left">Yield</p>
-              <p className="text-5xl font-black text-left text-emerald-400 font-mono">+{Math.max(0, 100 - timer) + 500}</p>
+            <div className="bg-neutral-900 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5 shadow-xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
+              <div className="absolute top-0 right-0 p-2 opacity-5"><Trophy size={32} /></div>
+              <p className="text-[9px] md:text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1 text-left">Yield</p>
+              <p className="text-3xl md:text-5xl font-black text-left text-emerald-400 font-mono">+{Math.max(0, 100 - timer) + 500}</p>
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 md:gap-4 max-w-sm mx-auto">
             {currentLevel < SCENARIOS.length - 1 ? (
               <button 
                 onClick={() => startLevel(currentLevel + 1)}
-                className="w-full py-5 bg-white text-black text-2xl font-black rounded-2xl flex items-center justify-center gap-4 hover:bg-blue-50 transition-all transition-all shadow-xl shadow-white/5"
+                className="w-full py-4 md:py-5 bg-white text-black text-xl md:text-2xl font-black rounded-xl md:rounded-2xl flex items-center justify-center gap-3 md:gap-4 hover:bg-blue-50 transition-all shadow-xl shadow-white/5"
               >
                 Next mission
               </button>
             ) : (
                 <button 
                   onClick={() => setGameState('DASHBOARD')}
-                  className="w-full py-5 bg-blue-600 text-white text-2xl font-black rounded-2xl flex items-center justify-center gap-4 hover:bg-blue-500 transition-all"
+                  className="w-full py-4 md:py-5 bg-blue-600 text-white text-xl md:text-2xl font-black rounded-xl md:rounded-2xl flex items-center justify-center gap-3 md:gap-4 hover:bg-blue-500 transition-all"
                 >
                   View profile
                 </button>
             )}
             <button 
               onClick={() => startLevel(currentLevel)}
-              className="w-full py-4 bg-neutral-900 text-white font-bold rounded-2xl border border-white/10 hover:bg-neutral-800 transition-all"
+              className="w-full py-3 md:py-4 bg-neutral-900 text-white font-bold rounded-xl md:rounded-2xl border border-white/10 hover:bg-neutral-800 transition-all text-sm md:text-base"
             >
               Retry experiment
             </button>
@@ -583,45 +583,72 @@ export default function App() {
 
   return (
     <DndContext>
-      <div className="flex h-screen bg-neutral-950 text-white overflow-hidden font-sans border-8 border-neutral-900">
+      <div className="flex flex-col md:flex-row h-screen bg-neutral-950 text-white overflow-hidden font-sans md:border-8 border-neutral-900">
         {/* HUD - Top Bar */}
-        <div className="absolute top-0 left-0 right-0 h-20 bg-neutral-900/80 backdrop-blur-xl border-b border-white/10 z-50 flex items-center justify-between px-10">
-           <div className="flex items-center gap-6">
+        <div className="absolute top-0 left-0 right-0 h-20 md:h-24 bg-neutral-900/80 backdrop-blur-xl border-b border-white/10 z-50 flex items-center justify-between px-4 md:px-6 lg:px-8">
+           <div className="flex items-center gap-4 lg:gap-8 transition-all">
               <button 
                 onClick={() => setGameState('MENU')}
-                className="p-3 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-all border border-white/5"
+                className="p-3 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-all border border-white/5 active:scale-95 group"
               >
-                <Menu size={20} />
+                <Menu size={20} className="group-hover:text-blue-400 transition-colors" />
               </button>
-              <div>
-                <p className="text-[10px] font-black text-blue-500 mb-0.5">Mission active</p>
-                <h3 className="text-xl font-black flex items-center gap-2">
-                  <ShieldAlert className="text-yellow-500" size={18} /> {scenario.title}
+              
+              <div className="hidden lg:flex flex-col">
+                <p className="text-[10px] font-black text-blue-500 mb-0.5 uppercase tracking-widest leading-none">Mission active</p>
+                <h3 className="text-xl font-black flex items-center gap-2 leading-none">
+                  {scenario.title}
                 </h3>
               </div>
            </div>
 
-           <div className="flex items-center gap-12">
-              <div className="text-right">
-                <p className="text-[10px] font-black text-neutral-500 mb-0.5">Objective</p>
+           <div className="flex items-center gap-6 md:gap-12">
+              <div className="hidden sm:block text-right">
+                <p className="text-[10px] font-black text-neutral-500 mb-0.5 uppercase tracking-widest">Objective</p>
                 <p className="font-bold text-white tracking-tight">{scenario.objective}</p>
               </div>
-               <div className="flex items-center gap-4 bg-black/40 px-6 py-2.5 rounded-2xl border border-white/5 shadow-inner">
-                 <div className="flex items-center gap-2 text-yellow-500 font-black text-2xl font-mono">
-                    <Clock size={24} className="opacity-50" /> {timer.toString().padStart(3, '0')}<span className="text-xs text-yellow-500/40 ml-0.5 font-sans">S</span>
+
+               {/* Integrated Capacity HUD */}
+               <div className="flex items-center gap-3 md:gap-4 bg-black/40 px-4 md:px-6 py-2 md:py-2.5 rounded-2xl border border-white/5 shadow-inner">
+                  <div className="flex flex-col">
+                    <span className="text-[8px] md:text-[9px] font-black text-neutral-500 tracking-widest uppercase leading-tight">Capacity</span>
+                    <span className="text-lg md:text-2xl font-black text-white tabular-nums drop-shadow-sm select-none font-mono leading-none">
+                      {Math.round(waterLevel).toString().padStart(3, '0')}<span className="text-blue-500 text-xs md:text-sm ml-0.5">%</span>
+                    </span>
+                  </div>
+                  <div className="h-6 md:h-8 w-px bg-white/10" />
+                  <div className="w-16 md:w-24 lg:w-32 flex flex-col gap-1.5">
+                    <div className="w-full bg-black/60 h-1.5 md:h-2 rounded-full overflow-hidden border border-white/5 relative">
+                      <motion.div 
+                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-600 via-blue-400 to-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]" 
+                        animate={{ width: `${waterLevel}%` }}
+                        transition={{ type: 'spring', stiffness: 30, damping: 10 }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className={`text-[7px] md:text-[8px] font-bold uppercase tracking-tighter ${isWaterFlowing ? 'text-blue-400 animate-pulse' : 'text-neutral-500'}`}>
+                        {isWaterFlowing ? 'Filling' : 'Stable'}
+                      </span>
+                    </div>
+                  </div>
+               </div>
+
+               <div className="flex items-center gap-3 md:gap-4 bg-black/40 px-4 md:px-6 py-2 md:py-2.5 rounded-2xl border border-white/5 shadow-inner">
+                 <div className="flex items-center gap-2 text-yellow-500 font-black text-lg md:text-2xl font-mono">
+                    <Clock size={20} className="md:size-6 opacity-50" /> {timer.toString().padStart(3, '0')}<span className="text-xs text-yellow-500/40 ml-0.5 font-sans">S</span>
                  </div>
                </div>
            </div>
         </div>
 
         {/* Sidebar */}
-        <div className="w-32 mt-20 pt-8 pb-8 bg-neutral-900 border-r border-white/5 flex flex-col gap-6 items-center shadow-2xl relative z-10">
-          <div className="p-3 bg-blue-600/20 rounded-2xl text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+        <div className="w-24 md:w-32 mt-20 md:mt-24 pt-8 pb-8 bg-neutral-900 border-r border-white/5 flex flex-col gap-6 items-center shadow-2xl relative z-10 overflow-y-auto">
+          <div className="hidden md:block p-3 bg-blue-600/20 rounded-2xl text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
             <FlaskConical size={24}/>
           </div>
           
           <div className="flex flex-col gap-5 w-full flex-1 items-center px-2">
-            <div className="text-[10px] font-black text-neutral-600 uppercase tracking-widest mb-2 px-4 w-full border-b border-white/5 pb-2">Reactants</div>
+            <div className="text-[10px] font-black text-neutral-600 uppercase tracking-widest mb-2 px-4 w-full border-b border-white/5 pb-2 text-center">Reactants</div>
             {METALS.map((metal) => (
                 <div 
                   key={metal.id} 
@@ -640,12 +667,12 @@ export default function App() {
         </div>
         
         {/* Lab Area */}
-        <div className="flex-1 flex flex-col justify-center items-center pt-20 p-8 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800 via-neutral-950 to-neutral-950 relative">
+        <div className="flex-1 flex flex-col justify-center items-center pt-24 md:pt-32 p-4 md:p-8 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800 via-neutral-950 to-neutral-950 relative">
           
           <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
           {/* Water Valve & Capacity Controls */}
-          <div className="flex flex-col items-center mb-12 relative z-20 w-full max-w-4xl px-8">
+          <div className="flex flex-col items-center mb-6 md:mb-12 relative z-20 w-full max-w-4xl px-4 md:px-8">
               {/* Tap Background Glow */}
               <AnimatePresence>
                 {isWaterFlowing && (
@@ -658,10 +685,10 @@ export default function App() {
                 )}
               </AnimatePresence>
 
-              <div className="flex items-center justify-center w-full relative">
+              <div className="flex flex-col items-center justify-center w-full relative gap-6">
                 {/* Centered Faucet Assembly */}
                 <div 
-                  className="flex flex-col items-center gap-1 cursor-pointer select-none relative -ml-[60px]" 
+                  className="flex flex-col items-center gap-1 cursor-pointer select-none relative" 
                   onClick={toggleValve}
                 >
                   <motion.div 
@@ -719,34 +746,10 @@ export default function App() {
                     </span>
                   </div>
                 </div>
-
-                {/* Offset Capacity HUD */}
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 p-6 rounded-3xl border border-white/5 backdrop-blur-md shadow-xl flex flex-col gap-3 min-w-[280px]">
-                  <div className="flex justify-between items-end mb-1">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] font-black text-neutral-500 tracking-widest mb-1">total capacity</span>
-                      <span className="text-2xl font-black text-white tabular-nums drop-shadow-sm select-none font-mono">
-                        {Math.round(waterLevel).toString().padStart(3, '0')}<span className="text-blue-500 text-sm ml-1">%</span>
-                      </span>
-                    </div>
-                    <div className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-tighter transition-all duration-500 ${isWaterFlowing ? 'bg-blue-500 text-white animate-pulse' : 'bg-neutral-800 text-neutral-500'}`}>
-                      {isWaterFlowing ? 'Filling...' : (isValveOpen ? 'Primed' : 'Idle')}
-                    </div>
-                  </div>
-                  
-                  <div className="w-full bg-black/60 h-3 rounded-full overflow-hidden border border-white/5 shadow-inner relative">
-                    <motion.div 
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-600 via-blue-400 to-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.6)]" 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${waterLevel}%` }}
-                      transition={{ type: 'spring', stiffness: 30, damping: 10 }}
-                    />
-                  </div>
-                </div>
               </div>
           </div>
 
-            <div className="relative w-80 h-[30rem] z-10">
+            <div className="relative w-64 md:w-80 h-[24rem] md:h-[30rem] z-10 shrink-0">
                 <motion.div
                     id="beaker"
                     animate={
@@ -757,7 +760,7 @@ export default function App() {
                                 : { rotate: 0 }
                     }
                     transition={{ duration: 0.3 }}
-                    className={`w-full h-full rounded-b-[4rem] border-x-[12px] border-b-[12px] backdrop-blur-xl flex justify-center items-end p-8 transition-all relative overflow-hidden ${beakerDamage === 'broken' ? 'bg-red-950/40 border-red-500/50 shadow-[0_0_50px_rgba(239,68,68,0.3)]' : beakerDamage === 'cracked' ? 'bg-orange-950/40 border-orange-500/50 shadow-[0_0_50px_rgba(249,115,22,0.2)]' : 'bg-white/5 border-white/20 shadow-2xl'}`}
+                    className={`w-full h-full rounded-b-[3rem] md:rounded-b-[4rem] border-x-[8px] md:border-x-[12px] border-b-[8px] md:border-b-[12px] backdrop-blur-xl flex justify-center items-end p-6 md:p-8 transition-all relative overflow-hidden ${beakerDamage === 'broken' ? 'bg-red-950/40 border-red-500/50 shadow-[0_0_50px_rgba(239,68,68,0.3)]' : beakerDamage === 'cracked' ? 'bg-orange-950/40 border-orange-500/50 shadow-[0_0_50px_rgba(249,115,22,0.2)]' : 'bg-white/5 border-white/20 shadow-2xl'}`}
                     onDrop={(e) => {
                         e.preventDefault();
                         const metalId = e.dataTransfer.getData('metalId');
@@ -884,8 +887,8 @@ export default function App() {
         </div>
 
         {/* Right Info Panel */}
-        <div className="w-[30%] mt-20 p-8 border-l border-white/5 bg-neutral-900 flex flex-col gap-6 relative z-10">
-            <h2 className="text-[10px] font-black text-blue-500">Chemical analysis</h2>
+        <div className="hidden md:flex w-[35%] lg:w-[25%] xl:w-[30%] mt-20 md:mt-24 p-6 md:p-8 border-l border-white/5 bg-neutral-900 flex-col gap-6 relative z-10 overflow-y-auto max-h-screen">
+            <h2 className="text-[10px] font-black text-blue-500 uppercase tracking-widest shrink-0">Chemical analysis</h2>
             
             <AnimatePresence mode="wait">
               {activeMetal ? (
@@ -894,18 +897,18 @@ export default function App() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    className="flex flex-col gap-6"
+                    className="flex flex-col gap-5 md:gap-6"
                   >
-                      <div className='flex items-center gap-5 p-6 bg-black/40 rounded-3xl border border-white/5'>
+                      <div className='flex items-center gap-4 md:gap-5 p-4 md:p-6 bg-black/40 rounded-2xl md:rounded-3xl border border-white/5'>
                           <MetalIcon type={activeMetal.iconType} color={activeMetal.color} symbol={activeMetal.chemical} size='small' />
                           <div>
                             <p className="text-[10px] font-black text-neutral-500">{activeMetal.chemical}</p>
-                            <h4 className="font-black text-white text-3xl tracking-tight">{activeMetal.name}</h4>
+                            <h4 className="font-black text-white text-xl md:text-3xl tracking-tight leading-tight">{activeMetal.name}</h4>
                           </div>
                       </div>
                       
-                      <div className="bg-neutral-800/40 p-6 rounded-3xl border border-white/5">
-                        <p className="text-sm text-neutral-300 leading-relaxed font-medium">
+                      <div className="bg-neutral-800/40 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5">
+                        <p className="text-xs md:text-sm text-neutral-300 leading-relaxed font-medium">
                           {activeMetal.description}
                         </p>
                       </div>
