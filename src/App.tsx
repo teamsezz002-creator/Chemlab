@@ -1,7 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { METALS } from './constants';
 import { SCENARIOS } from './gameData';
-import { DndContext } from '@dnd-kit/core';
+import { 
+  DndContext, 
+  useDraggable, 
+  useDroppable, 
+  DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  TouchSensor,
+  defaultDropAnimationSideEffects
+} from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 import { 
   FlaskConical, Circle, Box, Sparkles, Zap, Atom, 
   Trophy, Star, Clock, Target, ArrowRight, RotateCcw,
@@ -119,10 +132,53 @@ const MetalIcon = ({ type, color, symbol, size = 'big' }: { type: string, color:
     <div className={baseClass}>
       <div className="flex flex-col items-center gap-1">
         {getIcon()}
-        <span className={`${isBig ? 'text-lg' : 'text-[10px]'} font-black tracking-tighter`}>{symbol}</span>
+        <span className={`${isBig ? 'text-lg' : 'text-[10px]'} font-black tracking-tighter leading-none`}>{symbol}</span>
       </div>
       {/* Glossy overlay */}
       <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent rounded-inherit pointer-events-none" />
+    </div>
+  );
+};
+
+const DraggableMetal = ({ metal }: { metal: any }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: metal.id,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.3 : 1,
+    zIndex: isDragging ? 1000 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`flex flex-col items-center gap-1.5 cursor-grab active:cursor-grabbing group transition-all hover:translate-x-1 active:scale-95 w-full pr-2 pl-2 touch-none ${isDragging ? 'pointer-events-none' : ''}`}
+    >
+      <MetalIcon type={metal.iconType} color={metal.color} symbol={metal.chemical} size="small" />
+      <div className="flex flex-col items-center pointer-events-none">
+        <span className='text-[11px] text-white font-bold tracking-tight group-hover:text-blue-400 transition-colors uppercase leading-tight'>{metal.name}</span>
+        <span className='text-[10px] text-neutral-500 font-black uppercase tracking-tighter leading-tight'>{metal.reactivity}</span>
+      </div>
+    </div>
+  );
+};
+
+const DroppableBeaker = ({ children, onDrop }: { children: React.ReactNode, onDrop: () => void }) => {
+  const { isOver, setNodeRef } = useDroppable({
+    id: 'beaker',
+  });
+
+  return (
+    <div 
+      ref={setNodeRef}
+      className={`relative w-64 md:w-80 h-[24rem] md:h-[30rem] z-10 shrink-0`}
+    >
+      {children}
     </div>
   );
 };
@@ -131,6 +187,34 @@ const MetalIcon = ({ type, color, symbol, size = 'big' }: { type: string, color:
 
 export default function App() {
   const [gameState, setGameState] = useState<'MENU' | 'DASHBOARD' | 'INTRO' | 'PLAYING' | 'QUIZ' | 'RECAP'>('MENU');
+  const [activeId, setActiveId] = useState<string | null>(null);
+  
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 2,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 0,
+        tolerance: 10,
+      },
+    })
+  );
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id.toString());
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { over, active } = event;
+    setActiveId(null);
+    if (over && over.id === 'beaker') {
+      startReaction(active.id.toString());
+    }
+  };
+
   const [currentLevel, setCurrentLevel] = useState(0);
   const [score, setScore] = useState(0);
   const [stats, setStats] = useState<UserStats>({
@@ -581,8 +665,10 @@ export default function App() {
 
   // --- Playing View ---
 
+  const activeMetalDragging = activeId ? METALS.find(m => m.id === activeId) : null;
+
   return (
-    <DndContext>
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className="flex flex-col md:flex-row h-screen bg-neutral-950 text-white overflow-hidden font-sans md:border-8 border-neutral-900">
         {/* HUD - Top Bar */}
         <div className="absolute top-0 left-0 right-0 h-20 md:h-24 bg-neutral-900/80 backdrop-blur-xl border-b border-white/10 z-50 flex items-center justify-between px-4 md:px-6 lg:px-8">
@@ -648,20 +734,9 @@ export default function App() {
           </div>
           
           <div className="flex flex-col gap-5 w-full flex-1 items-center px-2">
-            <div className="text-[10px] font-black text-neutral-600 uppercase tracking-widest mb-2 px-4 w-full border-b border-white/5 pb-2 text-center">Reactants</div>
+            <div className="text-[10px] font-black text-neutral-600 uppercase tracking-widest mb-2 px-4 w-full border-b border-white/5 pb-2 text-center select-none">Reactants</div>
             {METALS.map((metal) => (
-                <div 
-                  key={metal.id} 
-                  draggable 
-                  onDragStart={(e) => e.dataTransfer.setData('metalId', metal.id)} 
-                  className="flex flex-col items-center gap-1.5 cursor-grab group transition-all hover:translate-x-1 active:scale-95 w-full pr-2 pl-2"
-                >
-                    <MetalIcon type={metal.iconType} color={metal.color} symbol={metal.chemical} size="small" />
-                    <div className="flex flex-col items-center">
-                      <span className='text-[11px] text-white font-bold tracking-tight group-hover:text-blue-400 transition-colors uppercase'>{metal.name}</span>
-                      <span className='text-[9px] text-neutral-500 font-black uppercase tracking-tighter'>{metal.reactivity}</span>
-                    </div>
-                </div>
+                <DraggableMetal key={metal.id} metal={metal} />
             ))}
           </div>
         </div>
@@ -693,11 +768,6 @@ export default function App() {
                 >
                   <motion.div 
                     className="hover:scale-105 transition-transform active:scale-95 relative"
-                    animate={isWaterFlowing ? { 
-                      x: [0, -1, 1, -1, 1, 0],
-                      y: [0, 1, -1, 1, -1, 0] 
-                    } : {}}
-                    transition={{ repeat: Infinity, duration: 0.1 }}
                   >
                     <TapIcon isOpen={isValveOpen} />
                     
@@ -749,7 +819,7 @@ export default function App() {
               </div>
           </div>
 
-            <div className="relative w-64 md:w-80 h-[24rem] md:h-[30rem] z-10 shrink-0">
+            <DroppableBeaker onDrop={() => {}}>
                 <motion.div
                     id="beaker"
                     animate={
@@ -761,12 +831,6 @@ export default function App() {
                     }
                     transition={{ duration: 0.3 }}
                     className={`w-full h-full rounded-b-[3rem] md:rounded-b-[4rem] border-x-[8px] md:border-x-[12px] border-b-[8px] md:border-b-[12px] backdrop-blur-xl flex justify-center items-end p-6 md:p-8 transition-all relative overflow-hidden ${beakerDamage === 'broken' ? 'bg-red-950/40 border-red-500/50 shadow-[0_0_50px_rgba(239,68,68,0.3)]' : beakerDamage === 'cracked' ? 'bg-orange-950/40 border-orange-500/50 shadow-[0_0_50px_rgba(249,115,22,0.2)]' : 'bg-white/5 border-white/20 shadow-2xl'}`}
-                    onDrop={(e) => {
-                        e.preventDefault();
-                        const metalId = e.dataTransfer.getData('metalId');
-                        if (metalId) startReaction(metalId);
-                    }}
-                    onDragOver={(e) => e.preventDefault()}
                 >
                     {/* Measurement Lines */}
                     <div className="absolute left-6 top-8 bottom-8 flex flex-col justify-between items-start opacity-20 pointer-events-none">
@@ -822,7 +886,7 @@ export default function App() {
                                  opacity: [0, 1, 0.4, 0],
                                  scale: [0.5, 1.2, 0.8],
                                  x: (Math.random() - 0.5) * 50
-                               }}
+                                }}
                                transition={{ 
                                  duration: 1 + Math.random() * 2, 
                                  repeat: Infinity,
@@ -836,7 +900,7 @@ export default function App() {
 
                     {/* Water Level */}
                     <motion.div 
-                      className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-blue-600/60 to-blue-400/40 backdrop-blur-sm border-t border-white/40" 
+                      className={`absolute bottom-0 left-0 w-full backdrop-blur-sm border-t border-white/40 transition-colors duration-1000 ${isSimulating ? 'bg-orange-500/40' : 'bg-blue-600/60'}`} 
                       animate={{ height: `${waterLevel}%` }} 
                       transition={{ type: 'spring', stiffness: 100, damping: 20 }} 
                     >
@@ -883,7 +947,7 @@ export default function App() {
                         )}
                     </AnimatePresence>
                 </motion.div>
-            </div>
+            </DroppableBeaker>
         </div>
 
         {/* Right Info Panel */}
@@ -966,6 +1030,23 @@ export default function App() {
                 </div>
             </div>
         </div>
+
+        <DragOverlay dropAnimation={{
+          sideEffects: defaultDropAnimationSideEffects({
+            styles: {
+              active: {
+                opacity: '0.4',
+              }
+            }
+          })
+        }}>
+          {activeMetalDragging ? (
+            <div className="flex flex-col items-center gap-2 cursor-grabbing scale-110">
+              <MetalIcon type={activeMetalDragging.iconType} color={activeMetalDragging.color} symbol={activeMetalDragging.chemical} size="small" />
+              <span className='text-[10px] text-white font-black uppercase bg-black/60 px-2 py-0.5 rounded backdrop-blur-md'>{activeMetalDragging.name}</span>
+            </div>
+          ) : null}
+        </DragOverlay>
       </div>
     </DndContext>
   );
