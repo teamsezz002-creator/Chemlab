@@ -1,0 +1,7 @@
+export const METALS = [
+  { id: 'na', name: 'Sodium', chemical: 'Na', reactivity: 'High', description: 'Highly reactive alkali metal. Sodium reacts explosively with water to form sodium hydroxide and hydrogen gas, often igniting the hydrogen due to the heat generated.', color: 'bg-rose-500', iconType: 'irregular' },
+  { id: 'ca', name: 'Calcium', chemical: 'Ca', reactivity: 'Medium', description: 'A reactive alkaline earth metal. Calcium reacts steadily with water to produce calcium hydroxide and hydrogen gas, creating a cloudy suspension.', color: 'bg-yellow-500', iconType: 'granular' },
+  { id: 'mg', name: 'Magnesium', chemical: 'Mg', reactivity: 'Low', description: 'An alkaline earth metal, less reactive than Calcium. Magnesium reacts very slowly with cold water and much more vigorously with steam to produce magnesium hydroxide and hydrogen gas.', color: 'bg-emerald-500', iconType: 'ribbon' },
+  { id: 'fe', name: 'Iron', chemical: 'Fe', reactivity: 'None', description: 'A transition metal. Iron does not react with cold or hot water under normal conditions; it is resistant to water-based oxidation at room temperature.', color: 'bg-gray-500', iconType: 'block' },
+  { id: 'cu', name: 'Copper', chemical: 'Cu', reactivity: 'None', description: 'A noble transition metal. Copper is unreactive with water and steam; it cannot displace hydrogen from water, making it corrosion-resistant to water.', color: 'bg-orange-500', iconType: 'wire' },
+];
